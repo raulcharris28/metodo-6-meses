@@ -142,6 +142,51 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   );
 }
 
+// ─── Video Section ──────────────────────────────────────────────
+const VIDEO_ID = 'dQw4w9WgXcQ'; // 🔄 Reemplaza con tu ID de YouTube cuando tengas el video
+
+function VideoSection() {
+  const [showModal, setShowModal] = useState(false);
+
+  return (
+    <section className={styles.videoSection}>
+      <div className={styles.videoContainer}>
+        <p className={styles.videoEyebrow}>✦ Conoce el método</p>
+        <h2 className={styles.videoTitle}>Descubre cómo funciona en 2 minutos</h2>
+        <p className={styles.videoSubtitle}>Mira cómo este método único ha transformado la vida de miles de hispanohablantes</p>
+
+        <div className={styles.videoThumb} onClick={() => setShowModal(true)}>
+          <div className={styles.videoOverlay} />
+          <img
+            src={`https://img.youtube.com/vi/${VIDEO_ID}/maxresdefault.jpg`}
+            alt="Video del Método 6 Meses"
+            className={styles.videoImg}
+          />
+          <div className={styles.playCircle}>
+            <svg viewBox="0 0 24 24" fill="white" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div className={styles.videoDuration}>2:45</div>
+        </div>
+
+        {showModal && (
+          <div className={styles.videoModalOverlay} onClick={() => setShowModal(false)}>
+            <div className={styles.videoModal} onClick={e => e.stopPropagation()}>
+              <button className={styles.videoModalClose} onClick={() => setShowModal(false)}>✕</button>
+              <iframe
+                src={`https://www.youtube.com/embed/${VIDEO_ID}?autoplay=1&rel=0`}
+                title="Método 6 Meses"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className={styles.videoIframe}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 // ─── Main Component ────────────────────────────────────────────
 export default function LandingPage() {
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
@@ -275,6 +320,9 @@ export default function LandingPage() {
           <div className={styles.statItem}><div className={`${styles.statIcon} ${styles.iconAmber}`}><Star size={24} /></div><div className={styles.statValue}>4.9/5</div><div className={styles.statLabel}>Calificación Promedio</div></div>
         </div>
       </section>
+
+      {/* ── Video Section ── */}
+      <VideoSection />
 
       {/* ── For Who ── */}
       <section className={styles.forWhoSection}>

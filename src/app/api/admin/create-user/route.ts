@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { sendWelcomeEmail } from '@/lib/email';
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? '';
 
@@ -34,12 +35,16 @@ export async function POST(req: NextRequest) {
   const { data, error } = await adminClient.auth.admin.createUser({
     email,
     password,
-    email_confirm: true, // Auto-confirmed, can login immediately
+    email_confirm: true,
+    user_metadata: { must_change_password: true },
   });
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
+
+  // Enviar email de bienvenida automático
+  await sendWelcomeEmail(email, password);
 
   return NextResponse.json({ success: true, user: { id: data.user.id, email: data.user.email } });
 }

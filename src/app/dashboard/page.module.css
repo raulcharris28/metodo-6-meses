@@ -659,3 +659,39 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
+
+/* ── Streak Widget ── */
+.streakWidget {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(239,68,68,0.08));
+  border: 1px solid rgba(251,191,36,0.25);
+  border-radius: 0.75rem;
+  padding: 0.6rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  color: #f1f5f9;
+  flex-wrap: wrap;
+}
+
+.streakIcon {
+  color: #f97316;
+  flex-shrink: 0;
+  animation: flicker 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes flicker {
+  from { opacity: 0.8; transform: scale(1); }
+  to   { opacity: 1;   transform: scale(1.1); }
+}
+
+.streakBadge {
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+}

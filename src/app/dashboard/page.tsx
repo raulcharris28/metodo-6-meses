@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { CLASES, getModulo, NOMBRE_MODULO } from '@/lib/clases';
-import { LogOut, CheckCircle2, Circle, Play, BookOpen, TrendingUp, Award, ChevronDown, ChevronUp, Headphones, BookMarked, Download, FileText, Shield } from 'lucide-react';
+import { LogOut, CheckCircle2, Circle, Play, BookOpen, TrendingUp, Award, ChevronDown, ChevronUp, Headphones, BookMarked, Download, FileText, Shield, Flame, Lock } from 'lucide-react';
 import styles from './page.module.css';
 
 type Clase = { id: number; modulo: number; titulo: string; descripcion: string; duracion: string; temas: string[]; };
@@ -18,6 +18,12 @@ export default function DashboardPage() {
   const [completadas, setCompletadas] = useState<Set<number>>(new Set());
   const [loading, setLoading] = useState(true);
   const [expandedModulo, setExpandedModulo] = useState<number | null>(null);
+  const [streak, setStreak] = useState(0);
+  const [mustChangePassword, setMustChangePassword] = useState(false);
+  const [newPwd, setNewPwd] = useState('');
+  const [newPwd2, setNewPwd2] = useState('');
+  const [changingPwd, setChangingPwd] = useState(false);
+  const [pwdError, setPwdError] = useState('');
 
   useEffect(() => {
     const init = async () => {
@@ -25,19 +31,51 @@ export default function DashboardPage() {
       if (!user) { router.push('/login'); return; }
       setUserEmail(user.email ?? '');
 
+      // Detectar si debe cambiar contraseña
+      if (user.user_metadata?.must_change_password) {
+        setMustChangePassword(true);
+      }
+
       // Load progress from Supabase
       const { data } = await supabase
         .from('progreso')
-        .select('clase_id')
+        .select('clase_id, created_at')
         .eq('user_id', user.id);
 
       if (data) {
         setCompletadas(new Set(data.map((r: { clase_id: number }) => r.clase_id)));
+
+        // Calcular racha de días
+        const days = new Set(
+          data.map((r: { created_at: string }) => new Date(r.created_at).toDateString())
+        );
+        let s = 0;
+        const today = new Date();
+        for (let i = 0; i < 365; i++) {
+          const d = new Date(today);
+          d.setDate(today.getDate() - i);
+          if (days.has(d.toDateString())) { s++; } else if (i > 0) { break; }
+        }
+        setStreak(s);
       }
       setLoading(false);
     };
     init();
   }, [router]);
+
+  const handleChangePassword = async () => {
+    if (newPwd.length < 6) { setPwdError('La contraseña debe tener al menos 6 caracteres.'); return; }
+    if (newPwd !== newPwd2) { setPwdError('Las contraseñas no coinciden.'); return; }
+    setChangingPwd(true);
+    setPwdError('');
+    const { error } = await supabase.auth.updateUser({
+      password: newPwd,
+      data: { must_change_password: false },
+    });
+    if (error) { setPwdError(error.message); setChangingPwd(false); return; }
+    setMustChangePassword(false);
+    setChangingPwd(false);
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -123,6 +161,16 @@ export default function DashboardPage() {
 
         {/* Hero */}
         <section className={styles.heroSection}>
+
+          {/* Streak Widget */}
+          {streak > 0 && (
+            <div className={styles.streakWidget}>
+              <Flame size={18} className={styles.streakIcon} />
+              <span><strong>{streak}</strong> {streak === 1 ? 'día' : 'días'} seguido{streak > 1 ? 's' : ''} estudiando</span>
+              {streak >= 7 && <span className={styles.streakBadge}>🏆 Racha semanal</span>}
+            </div>
+          )}
+
           <div className={styles.heroTop}>
             <div>
               <h1 className={styles.welcomeTitle}>Tu progreso</h1>
@@ -210,7 +258,38 @@ export default function DashboardPage() {
         </section>
 
       </main>
+
+      {/* ── Modal: Cambio de Contraseña Obligatorio ── */}
+      {mustChangePassword && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div style={{ background: '#1e293b', borderRadius: '1rem', padding: '2rem', maxWidth: '420px', width: '100%', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+              <div style={{ background: 'rgba(251,191,36,0.15)', borderRadius: '0.5rem', padding: '0.5rem', color: '#fbbf24' }}>
+                <Lock size={22} />
+              </div>
+              <h2 style={{ margin: 0, color: '#f1f5f9', fontSize: '1.2rem', fontWeight: 700 }}>Elige tu contraseña</h2>
+            </div>
+            <p style={{ color: '#94a3b8', fontSize: '0.88rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+              Por seguridad, debes crear una contraseña personal antes de continuar. No podrás acceder al contenido sin completar este paso.
+            </p>
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ color: '#94a3b8', fontSize: '0.8rem', display: 'block', marginBottom: '0.4rem' }}>Nueva contraseña (mín. 6 caracteres)</label>
+              <input type="password" value={newPwd} onChange={e => setNewPwd(e.target.value)} placeholder="••••••••"
+                style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', boxSizing: 'border-box' as const }} />
+            </div>
+            <div style={{ marginBottom: '1.25rem' }}>
+              <label style={{ color: '#94a3b8', fontSize: '0.8rem', display: 'block', marginBottom: '0.4rem' }}>Confirmar contraseña</label>
+              <input type="password" value={newPwd2} onChange={e => setNewPwd2(e.target.value)} placeholder="••••••••"
+                style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', boxSizing: 'border-box' as const }} />
+            </div>
+            {pwdError && <p style={{ color: '#f87171', fontSize: '0.83rem', marginBottom: '1rem' }}>{pwdError}</p>}
+            <button onClick={handleChangePassword} disabled={changingPwd || !newPwd || !newPwd2}
+              style={{ width: '100%', padding: '0.875rem', background: 'linear-gradient(135deg,#7c3aed,#0ea5e9)', border: 'none', borderRadius: '0.5rem', color: 'white', fontWeight: 700, fontSize: '1rem', cursor: 'pointer', opacity: changingPwd ? 0.7 : 1 }}>
+              {changingPwd ? 'Guardando...' : 'Guardar mi contraseña →'}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
