@@ -1,9 +1,8 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function sendWelcomeEmail(email: string, password: string) {
   try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
       from: 'Método 6 Meses <onboarding@resend.dev>',
       to: email,
