@@ -260,8 +260,8 @@ export default function DashboardPage() {
             <a href={`${SUPA}/storage/v1/object/public/INGLES/manual_modulo_1.pdf`} target="_blank" rel="noopener noreferrer" className={styles.materialCard}>
               <div className={styles.materialIcon} style={{ background: 'linear-gradient(135deg,#0ea5e9,#0284c7)' }}><BookMarked size={19} color="white" /></div>
               <div className={styles.materialInfo}>
-                <div className={styles.materialBadge} style={{ background: 'rgba(14,165,233,0.15)', color: '#38bdf8' }}>Pimsleur</div>
-                <h3 className={styles.materialTitle}>Manual Pimsleur</h3>
+                <div className={styles.materialBadge} style={{ background: 'rgba(14,165,233,0.15)', color: '#38bdf8' }}>Inmersión</div>
+                <h3 className={styles.materialTitle}>Manual de Inmersión</h3>
                 <p className={styles.materialDesc}>Modulos 1-3 - Clases 1 a 90</p>
               </div>
               <div className={styles.downloadBtn}><Download size={14} /> Abrir</div>
@@ -269,8 +269,8 @@ export default function DashboardPage() {
             <a href={`${SUPA}/storage/v1/object/public/INGLES/manual_assimil.pdf`} target="_blank" rel="noopener noreferrer" className={styles.materialCard}>
               <div className={styles.materialIcon} style={{ background: 'linear-gradient(135deg,#10b981,#059669)' }}><BookMarked size={19} color="white" /></div>
               <div className={styles.materialInfo}>
-                <div className={styles.materialBadge} style={{ background: 'rgba(16,185,129,0.15)', color: '#34d399' }}>Assimil</div>
-                <h3 className={styles.materialTitle}>Manual Assimil</h3>
+                <div className={styles.materialBadge} style={{ background: 'rgba(16,185,129,0.15)', color: '#34d399' }}>Consolidación</div>
+                <h3 className={styles.materialTitle}>Manual de Consolidación</h3>
                 <p className={styles.materialDesc}>Modulos 4-7 - Clases 91 a 195</p>
               </div>
               <div className={styles.downloadBtn}><Download size={14} /> Abrir</div>
@@ -284,7 +284,7 @@ export default function DashboardPage() {
             <div className={styles.cursoHeaderLeft}>
               <div className={styles.cursoIcon} style={{ background: 'rgba(14,165,233,0.15)', color: '#38bdf8' }}><Headphones size={19} /></div>
               <div>
-                <h2 className={styles.cursoTitle}>Pimsleur - Ingles Americano</h2>
+                <h2 className={styles.cursoTitle}>Etapa 1: Inmersión Auditiva</h2>
                 <p className={styles.cursoMeta}>Modulos 1, 2 y 3 - 90 lecciones de audio</p>
               </div>
             </div>
@@ -299,7 +299,7 @@ export default function DashboardPage() {
             <div className={styles.cursoHeaderLeft}>
               <div className={styles.cursoIcon} style={{ background: 'rgba(16,185,129,0.15)', color: '#34d399' }}><BookOpen size={19} /></div>
               <div>
-                <h2 className={styles.cursoTitle}>Assimil - El Ingles Americano</h2>
+                <h2 className={styles.cursoTitle}>Etapa 2: Consolidación y Fluidez</h2>
                 <p className={styles.cursoMeta}>Modulos 4, 5, 6 y 7 - 105 lecciones con talleres de repaso</p>
               </div>
             </div>

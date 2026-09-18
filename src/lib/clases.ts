@@ -31,7 +31,7 @@ export const CLASES: Clase[] = Array.from({ length: 195 }, (_, i) => {
     semana,
     titulo,
     descripcion: isAssimil
-      ? (isTaller ? 'Lección de consolidación Assimil. Sin audio — consulta el material de apoyo.' : `Lección Assimil número ${assimilLesson}.`)
+      ? (isTaller ? 'Lección de consolidación. Sin audio — consulta el material de apoyo.' : `Lección de Consolidación número ${assimilLesson}.`)
       : `Clase de inmersión auditiva número ${id}.`,
     duracion: "30:00",
     temas: []

@@ -221,13 +221,13 @@ export default function ClasePage() {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.875rem' }}>
               <span style={{ fontSize: '1.1rem' }}>🎧</span>
-              <strong style={{ color: '#38bdf8', fontSize: '0.95rem' }}>Cómo usar el Método Pimsleur en esta lección</strong>
+              <strong style={{ color: '#38bdf8', fontSize: '0.95rem' }}>Cómo usar la Inmersión Auditiva en esta lección</strong>
             </div>
-            <ul style={{ color: '#94a3b8', fontSize: '0.875rem', lineHeight: 1.8, paddingLeft: '1.25rem', margin: 0, listStyleType: 'disc' }}>
-              <li><strong style={{ color: '#f8fafc' }}>Solo escucha y habla:</strong> No necesitas tomar notas ni ver el manual durante el audio.</li>
-              <li><strong style={{ color: '#f8fafc' }}>Responde en voz alta:</strong> El tutor te hará preguntas. Responde <em>antes</em> de que te den la respuesta correcta.</li>
-              <li><strong style={{ color: '#f8fafc' }}>Cero distracciones:</strong> Busca un lugar tranquilo y concéntrate 100% en la pronunciación.</li>
-              <li><strong style={{ color: '#f8fafc' }}>Una al día:</strong> Pimsleur está diseñado para tomar <strong style={{ color: '#38bdf8' }}>una sola lección por día</strong> para aprovechar la repetición espaciada.</li>
+            <ul style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6, margin: 0, paddingLeft: '1.2rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+              <li><strong style={{ color: '#f8fafc' }}>Ponte auriculares:</strong> Elimina distracciones. Escucha el audio de corrido sin detenerlo.</li>
+              <li><strong style={{ color: '#f8fafc' }}>Responde en voz alta:</strong> El tutor te hará preguntas o te pedirá repetir. Tienes un tiempo de pausa para responder <strong>antes</strong> de que él te dé la respuesta correcta.</li>
+              <li><strong style={{ color: '#f8fafc' }}>No uses diccionario:</strong> Intenta deducir por contexto.</li>
+              <li><strong style={{ color: '#f8fafc' }}>Una al día:</strong> El método está diseñado para tomar <strong style={{ color: '#38bdf8' }}>una sola lección por día</strong> para aprovechar la repetición espaciada.</li>
             </ul>
             <div style={{ marginTop: '0.875rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(14,165,233,0.15)' }}>
               <a
@@ -252,7 +252,7 @@ export default function ClasePage() {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.875rem' }}>
               <span style={{ fontSize: '1.1rem' }}>📖</span>
-              <strong style={{ color: '#34d399', fontSize: '0.95rem' }}>Cómo usar el Método Assimil en esta lección</strong>
+              <strong style={{ color: '#34d399', fontSize: '0.95rem' }}>Cómo usar el Método de Consolidación en esta lección</strong>
             </div>
             <ol style={{ color: '#94a3b8', fontSize: '0.875rem', lineHeight: 1.8, paddingLeft: '1.25rem', margin: 0 }}>
               <li><strong style={{ color: '#f8fafc' }}>Abre el libro</strong> en la <strong style={{ color: '#34d399' }}>Lección {assimilLesson}</strong> (impreso o en pantalla). <em>Se recomienda imprimirlo para una mejor experiencia.</em></li>
@@ -267,7 +267,7 @@ export default function ClasePage() {
                 target="_blank" rel="noopener noreferrer"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: '#34d399', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'none' }}
               >
-                <span>📄</span> Abrir Manual Assimil (PDF)
+                <span>📄</span> Abrir Manual de Consolidación (PDF)
               </a>
             </div>
           </div>
@@ -278,7 +278,7 @@ export default function ClasePage() {
           /* TALLER / REPASO CARD */
           <div className={styles.playerCard} style={{ textAlign: 'center', padding: '2.5rem 2rem' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>📝</div>
-            <h2 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '0.5rem', color: '#f8fafc' }}>Lección de Repaso Assimil</h2>
+            <h2 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '0.5rem', color: '#f8fafc' }}>Lección de Repaso y Consolidación</h2>
             <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Esta es la <strong style={{ color: '#fbbf24' }}>Lección {assimilLesson}</strong> — una sesión de consolidación sin audio.</p>
 
             <div style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '0.875rem', padding: '1.25rem 1.5rem', textAlign: 'left', marginBottom: '1.5rem' }}>
