@@ -546,6 +546,22 @@ export default function LandingPage() {
         </div>
       )}
 
+      {/* ── Footer ── */}
+      <footer className={styles.siteFooter}>
+        <div className={styles.footerInner}>
+          <div className={styles.footerBrand}>
+            <span className={styles.footerLogo}>Método 6 Meses</span>
+            <span className={styles.footerSeparator}>·</span>
+            <span className={styles.footerTagline}>Aprende inglés escuchando</span>
+          </div>
+          <div className={styles.footerSignature}>
+            <span className={styles.footerBy}>creado por</span>
+            <span className={styles.footerName}>Oba Abi Aye</span>
+          </div>
+          <p className={styles.footerCopy}>© {new Date().getFullYear()} metodo6meses.com — Todos los derechos reservados</p>
+        </div>
+      </footer>
+
       {/* ── WhatsApp Button ── */}
       <a
         href="https://wa.me/573026441472?text=Hola%2C%20me%20interesa%20el%20M%C3%A9todo%206%20Meses%20para%20aprender%20ingl%C3%A9s%20%F0%9F%91%8B"

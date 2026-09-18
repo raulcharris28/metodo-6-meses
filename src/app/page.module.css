@@ -1099,6 +1099,77 @@
   margin: 0;
 }
 
+/* ── Footer ── */
+.siteFooter {
+  background: #020818;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 2.5rem 1.5rem 2rem;
+  text-align: center;
+}
 
+.footerInner {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
 
+.footerBrand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
+.footerLogo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  letter-spacing: -0.01em;
+}
+
+.footerSeparator {
+  color: #334155;
+  font-size: 1.1rem;
+}
+
+.footerTagline {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.footerSignature {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1.1rem;
+  border: 1px solid rgba(56,189,248,0.18);
+  border-radius: 999px;
+  background: rgba(56,189,248,0.05);
+}
+
+.footerBy {
+  font-size: 0.72rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.footerName {
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.04em;
+}
+
+.footerCopy {
+  font-size: 0.72rem;
+  color: #334155;
+  margin: 0;
+}
