@@ -1382,29 +1382,35 @@
 
   /* ── Urgency Bar ── */
   .urgencyBar {
-    flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.5rem 1rem;
-    font-size: 0.76rem;
+    flex-direction: row;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .countdownInline {
+    flex-shrink: 0;
   }
 
   /* ── Navbar ── */
   .navbar {
-    top: 52px; /* slightly more room for 2-line urgency bar */
-    padding: 0.75rem 1.25rem;
+    top: 32px; /* height of single-line urgency bar */
+    padding: 0.6rem 1.25rem;
   }
 
   .navLinks {
-    display: none; /* hide desktop nav links on mobile */
+    display: none;
   }
 
   .logo {
     font-size: 1.1rem;
   }
 
-  /* ── Hero ── */
+  /* ── Hero (push down past urgency bar + navbar) ── */
   .hero {
-    padding: 7rem 1.25rem 3rem;
+    padding: 8rem 1.25rem 3rem;
     gap: 2rem;
   }
 
