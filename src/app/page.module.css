@@ -4,9 +4,10 @@
   color: var(--foreground);
 }
 
+/* Navbar — back to top: 0 since urgency bar is now at the bottom */
 .navbar {
   position: fixed;
-  top: 36px;
+  top: 0;
   left: 0;
   right: 0;
   z-index: 90;
@@ -26,10 +27,10 @@
   box-shadow: 0 4px 30px rgba(0,0,0,0.3);
 }
 
-/* Urgency Bar */
+/* Urgency Bar — fixed at BOTTOM */
 .urgencyBar {
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
   z-index: 100;
@@ -37,11 +38,11 @@
   color: white;
   font-size: 0.82rem;
   font-weight: 600;
-  padding: 0.4rem 1.5rem;
+  padding: 0.6rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
   text-align: center;
   line-height: 1.4;
@@ -105,8 +106,9 @@
   color: var(--primary);
 }
 
+/* Hero — normal top padding (no urgency bar at top anymore) */
 .hero {
-  padding: 9.5rem 1.5rem 6rem;
+  padding: 7rem 1.5rem 5rem;
   max-width: 1152px;
   margin: 0 auto;
   display: flex;
@@ -1385,28 +1387,9 @@
    ════════════════════════════════════════ */
 @media (max-width: 768px) {
 
-  /* ── Urgency Bar ── */
-  .urgencyBar {
-    flex-direction: row;
-    gap: 0.4rem;
-    padding: 0.35rem 0.75rem;
-    font-size: 0.72rem;
-    white-space: nowrap;
-    overflow: hidden;
-    justify-content: center;
-  }
-
-  .urgencyLong {
-    display: none; /* hide "Oferta especial —" on mobile to save space */
-  }
-
-  .countdownInline {
-    flex-shrink: 0;
-  }
-
   /* ── Navbar ── */
   .navbar {
-    top: 32px; /* height of single-line urgency bar */
+    top: 0;
     padding: 0.6rem 1.25rem;
   }
 
@@ -1418,9 +1401,9 @@
     font-size: 1.1rem;
   }
 
-  /* ── Hero (push down past urgency bar + navbar) ── */
+  /* ── Hero (push down just past navbar) ── */
   .hero {
-    padding: 8rem 1.25rem 3rem;
+    padding: 5.5rem 1.25rem 5rem;
     gap: 2rem;
   }
 
