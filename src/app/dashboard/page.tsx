@@ -83,11 +83,25 @@ export default function DashboardPage() {
         setStreak(s);
       }
 
-      // Obtener URLs firmadas para los PDFs
-      const { data: url1 } = await supabase.storage.from('INGLES').createSignedUrl('manual_modulo_1.pdf', 3600);
-      const { data: url2 } = await supabase.storage.from('INGLES').createSignedUrl('manual_assimil.pdf', 3600);
-      if (url1) setUrlManual1(url1.signedUrl);
-      if (url2) setUrlManual2(url2.signedUrl);
+      // Obtener URLs firmadas para los PDFs via API Route (server-side con service role)
+      try {
+        const session = await supabase.auth.getSession();
+        const token = session.data.session?.access_token;
+        if (token) {
+          const resp = await fetch('/api/signed-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ files: ['manual_modulo_1.pdf', 'manual_assimil.pdf'] }),
+          });
+          const result = await resp.json();
+          if (result.urls) {
+            if (result.urls['manual_modulo_1.pdf']) setUrlManual1(result.urls['manual_modulo_1.pdf']);
+            if (result.urls['manual_assimil.pdf']) setUrlManual2(result.urls['manual_assimil.pdf']);
+          }
+        }
+      } catch (e) {
+        console.error('Error obteniendo signed URLs:', e);
+      }
 
       setLoading(false);
     };

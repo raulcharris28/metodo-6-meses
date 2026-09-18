@@ -82,14 +82,28 @@ export default function ClasePage() {
 
       setCompletada(!!data);
 
-      if (audioFileName) {
-        const { data: audioData } = await supabase.storage.from('INGLES').createSignedUrl(audioFileName, 3600);
-        if (audioData) setSignedAudioUrl(audioData.signedUrl);
-      }
-
+      // Generar Signed URLs via API Route (server-side con service role)
       const pdfFileName = isAssimil ? 'manual_assimil.pdf' : 'manual_modulo_1.pdf';
-      const { data: pdfData } = await supabase.storage.from('INGLES').createSignedUrl(pdfFileName, 3600);
-      if (pdfData) setSignedPdfUrl(pdfData.signedUrl);
+      const filesToSign = audioFileName ? [audioFileName, pdfFileName] : [pdfFileName];
+      
+      try {
+        const session = await supabase.auth.getSession();
+        const token = session.data.session?.access_token;
+        if (token) {
+          const resp = await fetch('/api/signed-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ files: filesToSign }),
+          });
+          const result = await resp.json();
+          if (result.urls) {
+            if (audioFileName && result.urls[audioFileName]) setSignedAudioUrl(result.urls[audioFileName]);
+            if (result.urls[pdfFileName]) setSignedPdfUrl(result.urls[pdfFileName]);
+          }
+        }
+      } catch (e) {
+        console.error('Error obteniendo signed URLs:', e);
+      }
     };
     init();
   }, [claseId, router, isAssimil, audioFileName]);
