@@ -57,6 +57,17 @@ export default function ClasePage() {
     const init = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push('/login'); return; }
+      
+      const meta = user.user_metadata || {};
+      if (meta.plan_type === 'trial' && meta.trial_start_date) {
+        const start = new Date(meta.trial_start_date).getTime();
+        const diffDays = Math.floor((new Date().getTime() - start) / (1000 * 60 * 60 * 24));
+        if (7 - diffDays <= 0) {
+          router.push('/dashboard'); // Redirigir al dashboard donde está el paywall
+          return;
+        }
+      }
+
       setUserId(user.id);
 
       const { data } = await supabase

@@ -236,6 +236,36 @@ export default function LandingPage() {
     }
   };
 
+  const [showTrialModal, setShowTrialModal] = useState(false);
+  const [trialEmail, setTrialEmail] = useState('');
+  const [loadingTrial, setLoadingTrial] = useState(false);
+
+  const handleTrialSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!trialEmail) return;
+    setLoadingTrial(true);
+    try {
+      const res = await fetch('/api/trial', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: trialEmail }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert('¡Prueba iniciada! Revisa tu correo electrónico para obtener tu contraseña.');
+        setShowTrialModal(false);
+        window.location.href = '/login';
+      } else {
+        alert(data.error || 'Error al iniciar la prueba.');
+      }
+    } catch {
+      alert('Error de conexión.');
+    } finally {
+      setLoadingTrial(false);
+    }
+  };
+
+
   const pad = (n: number) => String(n).padStart(2, '0');
 
   return (
@@ -279,9 +309,9 @@ export default function LandingPage() {
             <button onClick={() => openCheckout('lifetime')} className="btn btn-primary" style={{ fontSize: '1.125rem', padding: '1rem 2rem' }}>
               Empezar por $100 USD
             </button>
-            <a href="#metodologia" className={`btn ${styles.btnDemo}`} style={{ fontSize: '1.125rem', padding: '1rem 2rem' }}>
-              ▷ Ver cómo funciona
-            </a>
+            <button onClick={() => setShowTrialModal(true)} className={`btn ${styles.btnDemo}`} style={{ fontSize: '1.125rem', padding: '1rem 2rem', background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(255,255,255,0.1)' }}>
+              🎁 Empezar mis 7 Días Gratis
+            </button>
           </div>
           <div className={styles.heroTrust}>
             <span><ShieldCheck size={14} /> Acceso instantáneo al pagar</span>
@@ -589,6 +619,38 @@ export default function LandingPage() {
             </form>
             <p style={{ fontSize: '0.75rem', color: '#475569', marginTop: '0.875rem', textAlign: 'center' }}>
               🔒 Pago seguro vía Mercado Pago · Acceso inmediato
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── Modal: Prueba Gratis ── */}
+      {showTrialModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <button className={styles.modalClose} onClick={() => setShowTrialModal(false)}>
+              <X size={20} />
+            </button>
+            <h2 className={styles.modalTitle}>Comienza tus 7 Días Gratis</h2>
+            <p className={styles.modalSubtitle}>No necesitas tarjeta de crédito. Te enviaremos tu acceso de inmediato.</p>
+            <form onSubmit={handleTrialSubmit} className={styles.checkoutForm}>
+              <div className={styles.inputGroup}>
+                <label>Tu mejor correo</label>
+                <input 
+                  type="email" 
+                  className="input-field" 
+                  placeholder="nombre@email.com" 
+                  value={trialEmail}
+                  onChange={(e) => setTrialEmail(e.target.value)}
+                  required 
+                />
+              </div>
+              <button type="submit" className={`btn btn-primary ${styles.modalBtn}`} disabled={loadingTrial}>
+                {loadingTrial ? <Loader2 className="animate-spin" size={20} /> : 'Crear mi cuenta gratis'}
+              </button>
+            </form>
+            <p style={{ fontSize: '0.75rem', color: '#475569', marginTop: '0.875rem', textAlign: 'center' }}>
+              Obtendrás acceso a toda la metodología por 7 días.
             </p>
           </div>
         </div>

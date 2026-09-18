@@ -31,14 +31,26 @@ export async function POST(req: Request) {
             email: email,
             password: tempPassword,
             email_confirm: true,
-            user_metadata: { must_change_password: true },
+            user_metadata: { must_change_password: true, plan_type: 'lifetime' },
           });
 
-          if (error && error.message !== 'User already registered') {
+          if (error && error.message === 'User already registered') {
+            console.log(`Usuario ${email} ya existe. Actualizando a plan lifetime...`);
+            // Buscar al usuario por email para actualizarlo
+            const { data: { users } } = await supabaseAdmin.auth.admin.listUsers();
+            const existingUser = users.find(u => u.email === email);
+            
+            if (existingUser) {
+              await supabaseAdmin.auth.admin.updateUserById(existingUser.id, {
+                user_metadata: { ...existingUser.user_metadata, plan_type: 'lifetime' }
+              });
+              console.log(`✅ Plan de ${email} actualizado a lifetime`);
+            }
+          } else if (error) {
             console.error('Error creando usuario en Supabase:', error);
           } else {
-            console.log(`✅ Cuenta creada para ${email} vía Mercado Pago`);
-            // Enviar email de bienvenida
+            console.log(`✅ Cuenta creada para ${email} vía Mercado Pago (lifetime)`);
+            // Enviar email de bienvenida solo si es nuevo
             await sendWelcomeEmail(email, tempPassword);
           }
         }

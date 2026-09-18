@@ -25,15 +25,37 @@ export default function DashboardPage() {
   const [changingPwd, setChangingPwd] = useState(false);
   const [pwdError, setPwdError] = useState('');
 
+  const [isTrial, setIsTrial] = useState(false);
+  const [daysLeft, setDaysLeft] = useState(0);
+  const [isExpired, setIsExpired] = useState(false);
+
   useEffect(() => {
     const init = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push('/login'); return; }
       setUserEmail(user.email ?? '');
 
+      const meta = user.user_metadata || {};
+
       // Detectar si debe cambiar contraseña
-      if (user.user_metadata?.must_change_password) {
+      if (meta.must_change_password) {
         setMustChangePassword(true);
+      }
+
+      // Lógica de Prueba Gratis (7 días)
+      if (meta.plan_type === 'trial' && meta.trial_start_date) {
+        setIsTrial(true);
+        const start = new Date(meta.trial_start_date).getTime();
+        const now = new Date().getTime();
+        const diffDays = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+        const remaining = 7 - diffDays;
+        
+        if (remaining <= 0) {
+          setIsExpired(true);
+          setDaysLeft(0);
+        } else {
+          setDaysLeft(remaining);
+        }
       }
 
       // Load progress from Supabase
@@ -62,6 +84,7 @@ export default function DashboardPage() {
     };
     init();
   }, [router]);
+
 
   const handleChangePassword = async () => {
     if (newPwd.length < 6) { setPwdError('La contraseña debe tener al menos 6 caracteres.'); return; }
@@ -157,9 +180,37 @@ export default function DashboardPage() {
           <button id="btn-logout" className={styles.logoutBtn} onClick={handleLogout} title="Cerrar sesion"><LogOut size={18} /></button>
         </div>
       </nav>
+      
+      {/* ── Trial Banner ── */}
+      {isTrial && !isExpired && (
+        <div style={{ background: 'linear-gradient(90deg, #f59e0b, #d97706)', padding: '0.75rem', textAlign: 'center', color: 'white', fontSize: '0.9rem', fontWeight: 600 }}>
+          <span>Prueba Gratis: Te quedan {daysLeft} {daysLeft === 1 ? 'día' : 'días'}. </span>
+          <a href="/#pricing" style={{ color: 'white', textDecoration: 'underline', marginLeft: '0.5rem' }}>Adquiere el acceso de por vida aquí</a>
+        </div>
+      )}
+
       <main className={styles.main}>
 
-        {/* Hero */}
+        {/* ── Expired Paywall Overlay ── */}
+        {isExpired && (
+          <div style={{ position: 'absolute', inset: 0, zIndex: 50, backdropFilter: 'blur(10px)', background: 'rgba(15, 23, 42, 0.7)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', textAlign: 'center' }}>
+            <div style={{ background: '#1e293b', padding: '3rem 2rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)', maxWidth: '450px', width: '100%', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }}>
+              <div style={{ background: 'rgba(239, 68, 68, 0.15)', width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
+                <Lock size={32} color="#ef4444" />
+              </div>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white', marginBottom: '1rem' }}>Tu prueba ha expirado</h2>
+              <p style={{ color: '#94a3b8', marginBottom: '2rem', lineHeight: 1.6 }}>
+                Esperamos que hayas disfrutado tus 7 días de inmersión. Para continuar escuchando las clases y dominar el inglés, adquiere el acceso de por vida.
+              </p>
+              <a href="/#pricing" className="btn btn-primary" style={{ display: 'block', width: '100%', padding: '1rem', fontSize: '1.1rem', textDecoration: 'none' }}>
+                Desbloquear acceso de por vida
+              </a>
+              <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: '#64748b', marginTop: '1.5rem', cursor: 'pointer', fontSize: '0.9rem', textDecoration: 'underline' }}>
+                Cerrar sesión
+              </button>
+            </div>
+          </div>
+        )}
         <section className={styles.heroSection}>
 
           {/* Streak Widget */}
