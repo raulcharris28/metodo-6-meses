@@ -38,9 +38,9 @@ export async function POST(req: Request) {
         },
         external_reference: email, // CLAVE: Aquí guardamos el email para saber a quién crearle la cuenta
         back_urls: {
-          success: 'http://localhost:3000/login?success=true',
-          failure: 'http://localhost:3000/',
-          pending: 'http://localhost:3000/login?pending=true',
+          success: 'https://metodo6meses.com/login?success=true',
+          failure: 'https://metodo6meses.com/',
+          pending: 'https://metodo6meses.com/login?pending=true',
         },
         auto_return: 'approved',
       },
