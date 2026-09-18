@@ -78,6 +78,11 @@
   letter-spacing: 0.04em;
 }
 
+/* urgencyLong = extra text hidden on mobile */
+.urgencyLong {
+  display: inline;
+}
+
 .logo {
   font-size: 1.5rem;
   font-weight: 700;
@@ -1383,11 +1388,16 @@
   /* ── Urgency Bar ── */
   .urgencyBar {
     flex-direction: row;
-    gap: 0.5rem;
+    gap: 0.4rem;
     padding: 0.35rem 0.75rem;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     white-space: nowrap;
     overflow: hidden;
+    justify-content: center;
+  }
+
+  .urgencyLong {
+    display: none; /* hide "Oferta especial —" on mobile to save space */
   }
 
   .countdownInline {

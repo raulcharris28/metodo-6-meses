@@ -256,9 +256,9 @@ export default function LandingPage() {
 
       {/* ── Urgency Bar ── */}
       <div className={styles.urgencyBar}>
-        <span>🔥 Oferta especial — Precio de lanzamiento por tiempo limitado</span>
+        <span className={styles.urgencyText}>🔥 <span className={styles.urgencyLong}>Oferta especial — </span>Precio de lanzamiento</span>
         <span className={styles.countdownInline}>
-          Termina en: <strong>{pad(countdown.h)}:{pad(countdown.m)}:{pad(countdown.s)}</strong>
+          · Termina: <strong>{pad(countdown.h)}:{pad(countdown.m)}:{pad(countdown.s)}</strong>
         </span>
       </div>
 
