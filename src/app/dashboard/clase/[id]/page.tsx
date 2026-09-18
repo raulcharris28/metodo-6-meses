@@ -94,6 +94,12 @@ export default function ClasePage() {
       setDuration(audioRef.current.duration);
       setIsAudioLoaded(true);
       audioRef.current.volume = volume;
+      
+      // Saltar automáticamente los primeros 5 segundos para la Etapa 1
+      if (!isAssimil && audioRef.current.currentTime < 5) {
+        audioRef.current.currentTime = 5;
+        setCurrentTime(5);
+      }
     }
   };
 
@@ -122,14 +128,21 @@ export default function ClasePage() {
     if (!audioRef.current || !duration) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const pct = (e.clientX - rect.left) / rect.width;
-    const newTime = pct * duration;
+    let newTime = pct * duration;
+    
+    // Bloquear que el usuario regrese a los primeros 5 segundos en Etapa 1
+    if (!isAssimil && newTime < 5) {
+      newTime = 5;
+    }
+    
     audioRef.current.currentTime = newTime;
     setCurrentTime(newTime);
   };
 
   const handleRewind = () => {
     if (audioRef.current) {
-      audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 15);
+      const minTime = !isAssimil ? 5 : 0;
+      audioRef.current.currentTime = Math.max(minTime, audioRef.current.currentTime - 15);
     }
   };
 
