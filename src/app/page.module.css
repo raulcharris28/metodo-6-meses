@@ -1347,3 +1347,155 @@
   border: none;
   display: block;
 }
+
+/* ════════════════════════════════════════
+   MOBILE RESPONSIVE STYLES (max-width: 768px)
+   ════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── Urgency Bar ── */
+  .urgencyBar {
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.76rem;
+  }
+
+  /* ── Navbar ── */
+  .navbar {
+    top: 52px; /* slightly more room for 2-line urgency bar */
+    padding: 0.75rem 1.25rem;
+  }
+
+  .navLinks {
+    display: none; /* hide desktop nav links on mobile */
+  }
+
+  .logo {
+    font-size: 1.1rem;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 7rem 1.25rem 3rem;
+    gap: 2rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .heroCta {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .heroCta > * {
+    width: 100%;
+    text-align: center;
+  }
+
+  .heroVisual {
+    width: 100%;
+  }
+
+  /* ── Stats ── */
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  /* ── For Who ── */
+  .forWhoGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* ── Methodology ── */
+  .methodCards {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── Testimonials ── */
+  .testimonialsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── Pricing ── */
+  .pricingGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* ── FAQ ── */
+  .faqContainer {
+    padding: 0 1rem;
+  }
+
+  /* ── Video Section ── */
+  .videoSection {
+    padding: 3rem 1.25rem;
+  }
+
+  .videoTitle {
+    font-size: 1.4rem;
+  }
+
+  /* ── Sticky Buy Bar ── */
+  .stickyBar {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    text-align: center;
+  }
+
+  .stickyBar > * {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ── Section titles ── */
+  .sectionTitle {
+    font-size: 1.6rem;
+  }
+
+  .sectionSubtitle {
+    font-size: 0.95rem;
+  }
+
+  /* ── Player card ── */
+  .playerCard {
+    padding: 1rem;
+  }
+
+  /* ── WhatsApp CTA button ── */
+  .whatsappBtn {
+    font-size: 0.9rem;
+    padding: 0.75rem 1.25rem;
+  }
+}
+
+/* ════════════════════════════════════════
+   SMALL PHONES (max-width: 390px)
+   ════════════════════════════════════════ */
+@media (max-width: 390px) {
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .statValue {
+    font-size: 1.5rem;
+  }
+
+  .pricingCard {
+    padding: 1.5rem 1rem;
+  }
+}
