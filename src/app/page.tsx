@@ -303,8 +303,8 @@ export default function LandingPage() {
               </div>
             </div>
             <div className={styles.waveform}>
-              {[...Array(30)].map((_, i) => (
-                <div key={i} className={styles.waveBar} style={{ height: `${Math.max(10, Math.random() * 100)}%` }} />
+              {[40,65,30,80,55,90,45,70,35,85,60,75,50,95,25,42,68,33,88,53,78,48,93,28,63,38,83,58,73,43].map((h, i) => (
+                <div key={i} className={styles.waveBar} style={{ height: `${h}%` }} />
               ))}
             </div>
           </div>
