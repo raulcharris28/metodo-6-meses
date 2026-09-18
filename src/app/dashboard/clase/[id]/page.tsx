@@ -29,6 +29,9 @@ export default function ClasePage() {
   const [volume, setVolume] = useState(0.8);
   const [isAudioLoaded, setIsAudioLoaded] = useState(false);
   const [audioError, setAudioError] = useState(false);
+  
+  const [signedAudioUrl, setSignedAudioUrl] = useState('');
+  const [signedPdfUrl, setSignedPdfUrl] = useState('');
 
   const prevClase = claseId > 1 ? getClase(claseId - 1) : null;
   const nextClase = claseId < CLASES.length ? getClase(claseId + 1) : null;
@@ -39,7 +42,7 @@ export default function ClasePage() {
   // Every 7th Assimil lesson is a "taller" (review) with no audio
   const isTaller = isAssimil && assimilLesson % 7 === 0;
 
-  let audioUrl = '';
+  let audioFileName = '';
   if (claseId <= 90) {
     // PIMSLEUR LOGIC (Classes 1-90)
     let level = "I";
@@ -47,10 +50,10 @@ export default function ClasePage() {
     if (claseId > 60) { level = "III"; lessonNum = claseId - 60; }
     else if (claseId > 30) { level = "II"; lessonNum = claseId - 30; }
     const formattedId = lessonNum.toString().padStart(2, '0');
-    audioUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/INGLES/English%20${level}%20${formattedId}.mp3`;
+    audioFileName = `English ${level} ${formattedId}.mp3`;
   } else if (!isTaller) {
     // ASSIMIL LOGIC — only for non-taller lessons
-    audioUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/INGLES/Leccion%20${assimilLesson}.mp3`;
+    audioFileName = `Leccion ${assimilLesson}.mp3`;
   }
 
   useEffect(() => {
@@ -75,12 +78,21 @@ export default function ClasePage() {
         .select('id')
         .eq('user_id', user.id)
         .eq('clase_id', claseId)
-        .maybeSingle();
+        .single();
 
       setCompletada(!!data);
+
+      if (audioFileName) {
+        const { data: audioData } = await supabase.storage.from('INGLES').createSignedUrl(audioFileName, 3600);
+        if (audioData) setSignedAudioUrl(audioData.signedUrl);
+      }
+
+      const pdfFileName = isAssimil ? 'manual_assimil.pdf' : 'manual_modulo_1.pdf';
+      const { data: pdfData } = await supabase.storage.from('INGLES').createSignedUrl(pdfFileName, 3600);
+      if (pdfData) setSignedPdfUrl(pdfData.signedUrl);
     };
     init();
-  }, [claseId, router]);
+  }, [claseId, router, isAssimil, audioFileName]);
 
   // Audio Events
   const handleTimeUpdate = () => {
@@ -192,17 +204,19 @@ export default function ClasePage() {
 
   return (
     <div className={styles.page}>
-      {/* Hidden Real Audio Element */}
-      <audio 
-        ref={audioRef} 
-        src={audioUrl} 
-        onTimeUpdate={handleTimeUpdate}
-        onLoadedMetadata={handleLoadedMetadata}
-        onError={handleError}
-        onEnded={handleEnded}
-      />
-
-      {/* Background decoration */}
+      <div style={{ display: 'none' }}>
+        {signedAudioUrl && (
+          <audio
+            ref={audioRef}
+            src={signedAudioUrl}
+            onTimeUpdate={handleTimeUpdate}
+            onLoadedMetadata={handleLoadedMetadata}
+            onError={handleError}
+            onEnded={handleEnded}
+            preload="metadata"
+          />
+        )}
+      </div>
       <div className={styles.bgBlob} />
 
       {/* Navbar */}
@@ -244,7 +258,7 @@ export default function ClasePage() {
             </ul>
             <div style={{ marginTop: '0.875rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(14,165,233,0.15)' }}>
               <a
-                href={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/INGLES/manual_modulo_1.pdf`}
+                href={signedPdfUrl}
                 target="_blank" rel="noopener noreferrer"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: '#38bdf8', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'none' }}
               >
@@ -276,7 +290,7 @@ export default function ClasePage() {
             </ol>
             <div style={{ marginTop: '0.875rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(16,185,129,0.15)' }}>
               <a
-                href={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/INGLES/manual_assimil.pdf`}
+                href={signedPdfUrl}
                 target="_blank" rel="noopener noreferrer"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: '#34d399', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'none' }}
               >

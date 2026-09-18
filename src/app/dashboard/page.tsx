@@ -24,6 +24,8 @@ export default function DashboardPage() {
   const [newPwd2, setNewPwd2] = useState('');
   const [changingPwd, setChangingPwd] = useState(false);
   const [pwdError, setPwdError] = useState('');
+  const [urlManual1, setUrlManual1] = useState('#');
+  const [urlManual2, setUrlManual2] = useState('#');
 
   const [isTrial, setIsTrial] = useState(false);
   const [daysLeft, setDaysLeft] = useState(0);
@@ -80,6 +82,13 @@ export default function DashboardPage() {
         }
         setStreak(s);
       }
+
+      // Obtener URLs firmadas para los PDFs
+      const { data: url1 } = await supabase.storage.from('INGLES').createSignedUrl('manual_modulo_1.pdf', 3600);
+      const { data: url2 } = await supabase.storage.from('INGLES').createSignedUrl('manual_assimil.pdf', 3600);
+      if (url1) setUrlManual1(url1.signedUrl);
+      if (url2) setUrlManual2(url2.signedUrl);
+
       setLoading(false);
     };
     init();
@@ -257,7 +266,7 @@ export default function DashboardPage() {
         <section className={styles.materialesSection}>
           <h2 className={styles.sectionTitle}><FileText size={16} /> Materiales de Apoyo</h2>
           <div className={styles.materialesGrid}>
-            <a href={`${SUPA}/storage/v1/object/public/INGLES/manual_modulo_1.pdf`} target="_blank" rel="noopener noreferrer" className={styles.materialCard}>
+            <a href={urlManual1} target="_blank" rel="noopener noreferrer" className={styles.materialCard}>
               <div className={styles.materialIcon} style={{ background: 'linear-gradient(135deg,#0ea5e9,#0284c7)' }}><BookMarked size={19} color="white" /></div>
               <div className={styles.materialInfo}>
                 <div className={styles.materialBadge} style={{ background: 'rgba(14,165,233,0.15)', color: '#38bdf8' }}>Inmersión</div>
@@ -266,7 +275,7 @@ export default function DashboardPage() {
               </div>
               <div className={styles.downloadBtn}><Download size={14} /> Abrir</div>
             </a>
-            <a href={`${SUPA}/storage/v1/object/public/INGLES/manual_assimil.pdf`} target="_blank" rel="noopener noreferrer" className={styles.materialCard}>
+            <a href={urlManual2} target="_blank" rel="noopener noreferrer" className={styles.materialCard}>
               <div className={styles.materialIcon} style={{ background: 'linear-gradient(135deg,#10b981,#059669)' }}><BookMarked size={19} color="white" /></div>
               <div className={styles.materialInfo}>
                 <div className={styles.materialBadge} style={{ background: 'rgba(16,185,129,0.15)', color: '#34d399' }}>Consolidación</div>
