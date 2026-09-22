@@ -1,11 +1,18 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
-// Este endpoint usa la SERVICE ROLE KEY (solo en el servidor)
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Configuración de R2
+const s3 = new S3Client({
+  region: 'auto',
+  endpoint: process.env.R2_ENDPOINT!,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+  },
+});
+const bucketName = process.env.R2_BUCKET_NAME!;
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,15 +38,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Lista de archivos requerida' }, { status: 400 });
     }
 
-    // Generar signed URLs para cada archivo con el service role (servidor seguro)
+    // Generar signed URLs para cada archivo usando Cloudflare R2
     const urls: Record<string, string> = {};
     for (const fileName of files) {
-      const { data, error } = await supabaseAdmin.storage
-        .from('INGLES')
-        .createSignedUrl(fileName, 3600); // 1 hora
-      
-      if (!error && data) {
-        urls[fileName] = data.signedUrl;
+      try {
+        const command = new GetObjectCommand({
+          Bucket: bucketName,
+          Key: fileName,
+        });
+        
+        // El enlace expira en 1 hora (3600 segundos)
+        const signedUrl = await getSignedUrl(s3, command, { expiresIn: 3600 });
+        urls[fileName] = signedUrl;
+      } catch (err) {
+        console.error(`Error generando URL para ${fileName}:`, err);
       }
     }
 
